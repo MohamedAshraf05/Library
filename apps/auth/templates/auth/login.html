@@ -1,0 +1,33 @@
+<!-- <div style = "background-color: #f0f0f0;padding: 10px;margin-bottom: 20px; ">
+    {% if user.is_authenticated %}
+        <span><strong>Welcome, {{user.username}}</strong>!</span>
+        <a href = "{% url 'logout' %}">Logout</a>     
+    {% else %}
+        <span>You are not logged in</span>
+        <a href = "{% url 'signup' %}">Create Account</a>
+    {% endif %}
+</div> -->
+<h2>Login Site</h2>
+
+{% if error %}
+    <p style = "color:red">{{error}}</p>
+{% endif %}
+
+<form method ="POST">
+{% csrf_token %}
+
+    <div>
+        <label>Username/Email: </label>
+        <input type="text" name="username" required>
+    </div>
+    <br>
+    <div>
+        <label >Password: </label>
+        <input type="password" name = "password">
+    </div>
+    <br>
+
+    <button type="submit">Submit</button>
+</form>
+
+<p>Don't have account ? <a href="{% url 'signup' %}">Make a new account</a></p>
