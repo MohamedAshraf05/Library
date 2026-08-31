@@ -1,0 +1,33 @@
+<h2>Create New Account</h2>
+
+<form method='POST'>
+    {% csrf_token %}
+    <div>
+        <label>First Name: </label>
+        <input type="text" name = "first_name" required>
+    </div>
+    <br>
+    <div>
+        <label >Last Name: </label>
+        <input type="text" name = "last_name" required>
+    </div>
+    <br>
+    <div>
+        <label >Email: </label>
+        <input type="email" name = "email" required>
+    </div>
+    <br>
+    <div>
+        <label >Username: </label>
+        <input type="text" name="username" required>
+    </div>
+    <br>
+    <div>
+        <label>Password: </label>
+        <input type="password" name="password" required>
+    </div>  
+    <br>
+    <button type="submit">Create Account</button>
+</form>
+
+<p>Already Have an Account ? <a href="{% url 'login' %}">Login here</a></p>
