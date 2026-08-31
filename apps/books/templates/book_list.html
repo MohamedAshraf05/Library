@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Book Catalog - LMS{% endblock %}
+
+{% block content %}
+<h1>Book Catalog</h1>
+<p>Browse available titles and borrow your next read.</p>
+
+<div class="search-box" style="margin-top: 1rem;">
+    <input type="text" id="searchInput" placeholder="Search by title or author...">
+</div>
+
+<div class="book-grid" id="bookGrid">
+    {% for book in books %}
+    <div class="card book-item">
+        <div>
+            <h3 class="book-title">{{ book.title }}</h3>
+            <p><strong>Author:</strong> <span class="book-author">{{ book.author }}</span></p>
+            <p><strong>Category:</strong> {{ book.category }}</p>
+            <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+        </div>
+        <div>
+            <p>
+                <strong>Available Copies:</strong> {{ book.available_copies }} / {{ book.total_copies }}
+            </p>
+            {% if book.available_copies > 0 %}
+            <span class="badge badge-available">In Stock</span>
+            <form action="{% url 'borrow_book' book.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Borrow Book</button>
+            </form>
+            {% else %}
+            <span class="badge badge-unavailable">Out of Stock</span>
+            <button class="btn" disabled>Unavailable</button>
+            {% endif %}
+        </div>
+    </div>
+    {% empty %}
+    <p>No books currently available in the catalog.</p>
+    {% endfor %}
+</div>
+{% endblock %}

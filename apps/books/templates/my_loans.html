@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}My Borrowed Books - LMS{% endblock %}
+
+{% block content %}
+<h1>My Borrowed Books</h1>
+<p>Manage your current loans and return books here.</p>
+
+<div class="book-grid" style="margin-top: 1.5rem;">
+    {% for loan in active_loans %}
+    <div class="card">
+        <div>
+            <h3>{{ loan.book.title }}</h3>
+            <p><strong>Author:</strong> {{ loan.book.author }}</p>
+            <p><strong>Borrowed Date:</strong> {{ loan.borrow_date|date:"M d, Y" }}</p>
+        </div>
+        <div>
+            <form action="{% url 'return_book' loan.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Return Book</button>
+            </form>
+        </div>
+    </div>
+    {% empty %}
+    <div style="grid-column: 1 / -1; background: white; padding: 2rem; border-radius: 8px; text-align: center;">
+        <p>You currently have no borrowed books.</p>
+        <a href="{% url 'catalog' %}" class="btn btn-primary"
+            style="display: inline-block; width: auto; margin-top: 1rem;">Browse Catalog</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
