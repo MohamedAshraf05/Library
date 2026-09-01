@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}{{ book.title }} - Details{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="book-title mb-4">{{ book.title }}</h2>
+                    
+                    <div class="mb-3">
+                        <strong>Author:</strong>
+                        <p class="mb-0">{{ book.author }}</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <strong>ISBN:</strong>
+                        <p class="mb-0">{{ book.isbn }}</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <strong>Category:</strong>
+                        <p class="mb-0">{{ book.category }}</p>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <strong>Availability:</strong>
+                        {% if book.available_copies > 0 %}
+                            <span class="badge badge-available">
+                                Available ({{ book.available_copies }} of {{ book.total_copies }} copies)
+                            </span>
+                        {% else %}
+                            <span class="badge badge-unavailable">
+                                Currently Unavailable
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Loan Button for authenticated users -->
+                    {% if user.is_authenticated %}
+                        {% if book.available_copies > 0 %}
+                            <form method="POST" action="{% url 'loans:borrow_book' book.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn">
+                                    Borrow This Book
+                                </button>
+                            </form>
+                        {% else %}
+                            <button class="btn" disabled style="opacity: 0.5; cursor: not-allowed;">
+                                Currently Unavailable
+                            </button>
+                        {% endif %}
+                    {% else %}
+                        <p class="text-muted">
+                            <a href="{% url 'login' %}" style="color: #2563eb;">Login</a> 
+                            to borrow this book.
+                        </p>
+                    {% endif %}
+
+                    <a href="{% url 'loans:catalog' %}" class="btn btn-sm mt-3" style="background: #64748b;">
+                        ← Back to Catalog
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

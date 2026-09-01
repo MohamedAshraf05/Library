@@ -5,7 +5,10 @@ from django.contrib.auth.models import User
 def login_view(request):
     if request.method == 'POST':
         login_input = request.POST.get('username')
-        pass_word = request.POST.get('password')
+        password = request.POST.get('password')
+
+        if not login_input or not password:
+            return render(request, 'auth/login.html', {'error': 'Please enter both username/email and password'})
         
         username_to_auth = login_input
 
@@ -15,11 +18,11 @@ def login_view(request):
             username_to_auth = user_by_email.username
 
         # Try to log the user in
-        user = authenticate(request, username=username_to_auth, password=pass_word)
+        user = authenticate(request, username=username_to_auth, password=password)
 
         if user is not None:
             login(request, user)
-            return redirect('login')
+            return redirect('loans:my_loans')
         else:
             return render(request, 'auth/login.html', {'error': 'Username/Email or password is invalid'})
 

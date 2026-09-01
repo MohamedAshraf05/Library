@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row mb-4">
+        <div class="col-md-8 offset-md-2 text-center">
+            <h2 class="mb-3">Book Catalog</h2>
+            <!-- Pure client-side search input (no form submission) -->
+            <input type="text" 
+                   id="searchInput" 
+                   class="form-control form-control-lg" 
+                   placeholder="Search for a book by title, author, category, or ISBN...">
+        </div>
+    </div>
+
+    {% if books %}
+        <!-- Books Grid -->
+        <div class="book-grid" id="bookGrid">
+            {% for book in books %}
+            <div class="book-item">
+                <h5 class="book-title">{{ book.title }}</h5>
+                <p class="book-author"><strong>Author:</strong> {{ book.author }}</p>
+                <p class="book-isbn"><strong>ISBN:</strong> {{ book.isbn }}</p>
+                <p class="book-category"><strong>Category:</strong> {{ book.category }}</p>
+                
+                <!-- Availability badge -->
+                {% if book.available_copies > 0 %}
+                    <span class="badge badge-available">
+                        Available ({{ book.available_copies }}/{{ book.total_copies }})
+                    </span>
+                {% else %}
+                    <span class="badge badge-unavailable">
+                        Unavailable
+                    </span>
+                {% endif %}
+
+                <!-- View Details Button -->
+                <a href="{% url 'loans:book_detail' book.pk %}" class="btn mt-3">
+                    View Details
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Client-side "No Results" Message (Hidden by default) -->
+        <div id="noResultsMessage" class="text-center py-5" style="display: none;">
+            <div class="empty-icon mb-4" style="font-size: 4rem; color: #cbd5e1;">🔍</div>
+            <h3 class="mb-3" style="color: #475569;">No books found</h3>
+            <p class="text-muted mb-4">
+                We couldn't find any books matching your search.
+            </p>
+            <button id="clearSearchBtn" class="btn" style="width: auto; padding: 0.75rem 2rem;">
+                Clear Search
+            </button>
+        </div>
+
+    {% else %}
+        <!-- Database Empty State -->
+        <div class="empty-state text-center py-5">
+            <div class="empty-icon mb-4" style="font-size: 4rem; color: #cbd5e1;">
+                📚
+            </div>
+            <h3 class="mb-3" style="color: #475569;">No books available</h3>
+            <p class="text-muted mb-4">
+                The library catalog is currently empty. Check back later!
+            </p>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+    .empty-state {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 3rem 2rem;
+        border: 1px solid #f1f5f9;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+</style>
+
+{% endblock %}

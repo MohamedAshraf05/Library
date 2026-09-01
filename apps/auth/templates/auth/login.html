@@ -1,33 +1,45 @@
-<!-- <div style = "background-color: #f0f0f0;padding: 10px;margin-bottom: 20px; ">
-    {% if user.is_authenticated %}
-        <span><strong>Welcome, {{user.username}}</strong>!</span>
-        <a href = "{% url 'logout' %}">Logout</a>     
-    {% else %}
-        <span>You are not logged in</span>
-        <a href = "{% url 'signup' %}">Create Account</a>
-    {% endif %}
-</div> -->
-<h2>Login Site</h2>
+{% extends 'base.html' %}
+{% block title %}Login{% endblock title %}
 
-{% if error %}
-    <p style = "color:red">{{error}}</p>
-{% endif %}
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-5">
+        
+        <!-- Uses your custom .card class from style.css for the white rounded box -->
+        <div class="card text-center">
+            <h2 class="mb-4">Login to LMS</h2>
 
-<form method ="POST">
-{% csrf_token %}
+            {% if error %}
+                <!-- Replaced inline style with Bootstrap's danger alert -->
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endif %}
 
-    <div>
-        <label>Username/Email: </label>
-        <input type="text" name="username" required>
+            <!-- text-start keeps labels and inputs aligned to the left -->
+            <form method="POST" class="text-start">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="username" class="form-label fw-semibold">Username or Email</label>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label fw-semibold">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+
+                <!-- Uses your custom .btn class for the blue gradient and full-width effect -->
+                <button type="submit" class="btn">Login</button>
+            </form>
+
+            <p class="mt-4 mb-0">
+                Don't have an account? 
+                <a href="{% url 'signup' %}" class="fw-semibold text-decoration-none" style="color: #2563eb;">Register</a>
+            </p>
+        </div>
+
     </div>
-    <br>
-    <div>
-        <label >Password: </label>
-        <input type="password" name = "password">
-    </div>
-    <br>
-
-    <button type="submit">Submit</button>
-</form>
-
-<p>Don't have account ? <a href="{% url 'signup' %}">Make a new account</a></p>
+</div>
+{% endblock content %}
