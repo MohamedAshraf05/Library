@@ -18,7 +18,7 @@ def borrow_book(request, book_id):
 
     if already_borrowed:
         messages.error(request, "You already have this book borrowed.")
-        return redirect('catalog:book_list')
+        return redirect('loans:catalog')
 
     with transaction.atomic():
         # نعيد قراءة الكتاب جوه الـ transaction عشان الـ check يكون دقيق
@@ -26,7 +26,7 @@ def borrow_book(request, book_id):
 
         if book.available_copies < 1:
             messages.error(request, "No copies available.")
-            return redirect('catalog:book_list')
+            return redirect('loans:catalog')
 
         book.available_copies -= 1
         book.save()
